@@ -41,6 +41,7 @@ async function run() {
 
     const userCollection = client.db(`Wedding`).collection(`Users`);
     const adminCollection = client.db(`Wedding`).collection(`Admin`);
+    const wishesCollection = client.db(`Wedding`).collection(`Wishes`);
 
     // send user data to the database
     app.post("/user", async (req, res) => {
@@ -54,6 +55,19 @@ async function run() {
     app.get("/users", async (req, res) => {
       const cursor = userCollection.find();
       const result = await cursor.toArray();
+      res.send(result);
+    });
+    // get the wishes by the users
+    app.get("/wishes", async (req, res) => {
+      const cursor = wishesCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+    // post the wishes by the users
+    app.post("/wishes", async (req, res) => {
+      const wishDetails = req.body;
+      // console.log(wishDetails);
+      const result = await wishesCollection.insertOne(wishDetails);
       res.send(result);
     });
 
